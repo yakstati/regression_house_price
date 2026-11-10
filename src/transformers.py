@@ -14,7 +14,7 @@ class DataCleaner(TransformerMixin, BaseEstimator):
         self.square_q99_ = X['Square'].quantile(0.99)
         self.rooms_q1_ = X['Rooms'].quantile(0.01)
         self.rooms_q99_ = X['Rooms'].quantile(0.99)
-        self.median_square_per_room_ = X.loc[(X['Rooms'] > self.rooms_q1_) & (X['Rooms'] < self.rooms_q99_) & (X['Square'] > self.square_q1_) & (X['Square'] < self.square_q99_), 'Square'].median()
+        self.median_square_per_room_ = (X.loc[(X['Rooms'] > self.rooms_q1_) & (X['Rooms'] < self.rooms_q99_) & (X['Square'] > self.square_q1_) & (X['Square'] < self.square_q99_), 'Square'] / X.loc[(X['Rooms'] > self.rooms_q1_) & (X['Rooms'] < self.rooms_q99_) & (X['Square'] > self.square_q1_) & (X['Square'] < self.square_q99_), 'Room']).median()
         self.kitchensquare_median_ = X['KitchenSquare'].median()
         self.kitchensquare_q99_ = X['KitchenSquare'].quantile(0.99)
 
@@ -23,6 +23,7 @@ class DataCleaner(TransformerMixin, BaseEstimator):
 
     def transform(self, X: pd.DataFrame) -> pd.DataFrame:
         X = X.copy()
+        X.drop('Id', axis=1, inplace=True)
         square_less_q1_mask = X['Square'] < self.square_q1_
         square_q99_greater_mask = X['Square'] > self.square_q99_
         rooms_0_mask = (X['Rooms'] == 0)
@@ -82,6 +83,7 @@ class LifesquareKNNImputer(TransformerMixin, BaseEstimator):
 
     def fit(self, X, y=None):
         fit_mask = X['LifeSquare'].notna()
+        X = X[ (X['LifeSquare'] < 200) & (X['LifeSquare'] > 10)]
         self.cols_for_knn_ = list(set(X.columns.to_list()) - set(['LifeSquare', 'Healthcare_1']))
         X_to_scale = X.loc[fit_mask, self.cols_for_knn_]
         target = X.loc[fit_mask, 'LifeSquare']

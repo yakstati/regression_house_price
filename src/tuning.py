@@ -50,6 +50,5 @@ def get_or_tune_params(
         "n_trials": n_trials,
     }
     save_config(config, config_path)
-    print(f"[tuning] '{section}': best={study.best_value:.4f}, сохранено в {config_path}")
 
     return dict(study.best_params)
