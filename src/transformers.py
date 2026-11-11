@@ -242,7 +242,7 @@ class FeaturesCreator(TransformerMixin, BaseEstimator):
     def __init__(self):
         pass
 
-    def fit(self, X, y):
+    def fit(self, X, y=None):
         temp = X[['DistrictId', 'Square']].copy()
         temp['Price'] = y.values   
 
