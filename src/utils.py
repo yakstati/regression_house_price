@@ -31,3 +31,7 @@ def show_weights(model):
 
     for name, imp in sorted(zip(feature_names, importances), key=lambda x: x[1], reverse=True):
         print(f"{name}: {imp:.4f}")
+
+def save_res(model_name, r2_val, rmse_val, res_table):
+    res_table.loc[model_name, 'r2'] = r2_val
+    res_table.loc[model_name, 'rmse'] = rmse_val

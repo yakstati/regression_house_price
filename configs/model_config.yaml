@@ -1,0 +1,10 @@
+models:
+  lifesquare:
+    n_neighbors: 7
+    weights: distance
+    p: 2
+
+  healthcare:
+    n_neighbors: 11
+    weights: uniform
+    p: 1

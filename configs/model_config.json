@@ -1,0 +1,76 @@
+[
+    {
+        "model_name": "LifeSquareImputer",
+        "params": {
+            "n_neighbors": 6
+        }
+    },
+    {
+        "model_name": "HealthcareImputer",
+        "params": {
+            "n_neighbors": 2
+        }
+    },
+    {
+        "model_name": "DecisionTree",
+        "params": {
+            "max_depth": 22,
+            "min_samples_split": 51,
+            "min_samples_leaf": 7,
+            "max_features": "sqrt"
+        }
+    },
+    {
+        "model_name": "RandomForest",
+        "params": {
+            "max_depth": 15,
+            "min_samples_split": 8,
+            "min_samples_leaf": 5,
+            "max_features": "sqrt",
+            "n_estimators": 419
+        }
+    },
+    {
+        "model_name": "GradientBoosting",
+        "params": {
+            "max_depth": 9,
+            "min_samples_split": 43,
+            "min_samples_leaf": 35,
+            "max_features": "sqrt",
+            "n_estimators": 811,
+            "learning_rate": 0.018964364667239084
+        }
+    },
+    {
+        "model_name": "CatBoost",
+        "params": {
+            "depth": 8,
+            "l2_leaf_reg": 1.8679804109236784,
+            "iterations": 1255,
+            "learning_rate": 0.0391545048415441,
+            "random_strength": 0.6
+        }
+    },
+    {
+        "model_name": "XGBoost",
+        "params": {
+            "n_estimators": 757,
+            "max_depth": 4,
+            "learning_rate": 0.0670942868711159,
+            "reg_lambda": 8.470480081281215
+        }
+    },
+    {
+        "model_name": "LightGBM",
+        "params": {
+            "n_estimators": 431,
+            "max_depth": 7,
+            "learning_rate": 0.048825685319224564,
+            "reg_lambda": 2.3578241274985103,
+            "num_leaves": 215,
+            "min_data_in_leaf": 40,
+            "subsample": 0.9184878774648287,
+            "feature_fraction": 0.33509568163558134
+        }
+    }
+]
