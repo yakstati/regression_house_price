@@ -94,7 +94,7 @@ class LifesquareKNNImputer(TransformerMixin, BaseEstimator):
     def __init__(self):
         pass
 
-    def fit(self, X, y=None):
+    def fit(self, X: pd.DataFrame, y: pd.DataFrame=None):
         X = X.copy()
         X = X[(X['LifeSquare'] < 200) & (X['LifeSquare'] > 10)]
 
@@ -159,7 +159,7 @@ class LifesquareKNNImputer(TransformerMixin, BaseEstimator):
 
         return self
 
-    def transform(self, X):
+    def transform(self, X: pd.DataFrame) -> pd.DataFrame:
         X = X.copy()
 
         miss_mask = X['LifeSquare'].isna() | (X['LifeSquare'] > 500)
@@ -172,7 +172,7 @@ class HealthcareKNNImputer(TransformerMixin, BaseEstimator):
     def __init__(self):
         pass
 
-    def fit(self, X, y=None):
+    def fit(self, X: pd.DataFrame, y: pd.DataFrame=None):
         fit_mask = X['Healthcare_1'].notna()
         self.cols_for_knn_ = list(set(X.columns.to_list()) - set(['Healthcare_1']))
         X_to_scale = X.loc[fit_mask, self.cols_for_knn_]
@@ -229,7 +229,7 @@ class HealthcareKNNImputer(TransformerMixin, BaseEstimator):
 
         return self
 
-    def transform(self, X):
+    def transform(self, X: pd.DataFrame) -> pd.DataFrame:
         X = X.copy()
 
         miss_mask = X['Healthcare_1'].isna()
@@ -242,7 +242,7 @@ class FeaturesCreator(TransformerMixin, BaseEstimator):
     def __init__(self):
         pass
 
-    def fit(self, X, y=None):
+    def fit(self, X: pd.DataFrame, y: pd.DataFrame=None):
         temp = X[['DistrictId', 'Square']].copy()
         temp['Price'] = y.values   
 
@@ -262,7 +262,7 @@ class FeaturesCreator(TransformerMixin, BaseEstimator):
 
         return self
 
-    def transform(self, X):
+    def transform(self, X: pd.DataFrame) -> pd.DataFrame:
         X = X.copy()
         
         X['Is_First_Floor'] = (X['Floor'] == 1) * 1
@@ -289,14 +289,14 @@ class SimpleDataCleaner(TransformerMixin, BaseEstimator):
     def __init__(self):
         pass
 
-    def fit(self, X, y=None):
+    def fit(self, X: pd.DataFrame, y: pd.DataFrame=None):
         self.median_lifesquare_ = X['LifeSquare'].median()
         self.median_healthcare = X['Healthcare_1'].median()
 
         return self
 
-    def transform(self, X):
-        X.copy()
+    def transform(self, X: pd.DataFrame) -> pd.DataFrame:
+        X = X.copy()
         X['LifeSquare'].fillna(self.median_lifesquare_, inplace=True)
         X['Healthcare_1'].fillna(self.median_healthcare, inplace=True)
         X.drop('Id', axis=1, inplace=True)

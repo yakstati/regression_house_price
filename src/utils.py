@@ -2,8 +2,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 from sklearn.metrics import r2_score as r2, mean_squared_error as mse
 import seaborn as sns
+import pandas as pd
 
-def evaluate_preds(true_values, pred_values, save=False):
+def evaluate_preds(true_values, pred_values, save: bool=False):
     true_values = np.ravel(true_values)
     pred_values = np.ravel(pred_values)
 
@@ -16,7 +17,7 @@ def evaluate_preds(true_values, pred_values, save=False):
     ax.text(0.05, 0.95, textstr, transform=ax.transAxes, fontsize=14,
             verticalalignment='top', bbox=props)    
     sns.scatterplot(x=pred_values, y=true_values)
-    ax.plot([min(pred_values), max(pred_values)], [min(true_values), max(true_values)], linestyle='--', color='black')  # ���������, ��� true_values = pred_values
+    ax.plot([min(pred_values), max(pred_values)], [min(true_values), max(true_values)], linestyle='--', color='black')
     plt.xlabel('Predicted values')
     plt.ylabel('True values')
     plt.title('True vs Predicted values')
@@ -32,11 +33,11 @@ def show_weights(model):
     for name, imp in sorted(zip(feature_names, importances), key=lambda x: x[1], reverse=True):
         print(f"{name}: {imp:.4f}")
 
-def save_res(model_name, r2_val, rmse_val, res_table):
+def save_res(model_name: str, r2_val: float, rmse_val: float, res_table: pd.DataFrame):
     res_table.loc[model_name, 'r2'] = r2_val
     res_table.loc[model_name, 'rmse'] = rmse_val
 
-def reduce_mem_usage(df):
+def reduce_mem_usage(df: pd.DataFrame) -> pd.DataFrame:
     start_mem = df.memory_usage().sum() / 1024**2
     print('Memory usage of dataframe is {:.2f} MB'.format(start_mem))
     
