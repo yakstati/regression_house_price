@@ -14,63 +14,68 @@
     {
         "model_name": "DecisionTree",
         "params": {
-            "max_depth": 22,
-            "min_samples_split": 51,
-            "min_samples_leaf": 7,
-            "max_features": "sqrt"
+            "max_depth": 34,
+            "min_samples_split": 100,
+            "min_samples_leaf": 11,
+            "max_features": null,
+            "random_state": 42
         }
     },
     {
         "model_name": "RandomForest",
         "params": {
-            "max_depth": 15,
-            "min_samples_split": 8,
+            "max_depth": 19,
+            "min_samples_split": 10,
             "min_samples_leaf": 5,
             "max_features": "sqrt",
-            "n_estimators": 419
+            "n_estimators": 392,
+            "random_state": 42
         }
     },
     {
         "model_name": "GradientBoosting",
         "params": {
-            "max_depth": 9,
-            "min_samples_split": 43,
-            "min_samples_leaf": 35,
+            "max_depth": 8,
+            "min_samples_split": 28,
+            "min_samples_leaf": 28,
             "max_features": "sqrt",
-            "n_estimators": 811,
-            "learning_rate": 0.018964364667239084
+            "n_estimators": 1142,
+            "learning_rate": 0.013033222215931515,
+            "random_state": 42
         }
     },
     {
         "model_name": "CatBoost",
         "params": {
-            "depth": 8,
-            "l2_leaf_reg": 1.8679804109236784,
-            "iterations": 1255,
-            "learning_rate": 0.0391545048415441,
-            "random_strength": 0.6
+            "depth": 7,
+            "l2_leaf_reg": 0.9862677799008113,
+            "iterations": 1402,
+            "learning_rate": 0.01635852318308161,
+            "random_strength": 0.6190862841730198
         }
     },
     {
         "model_name": "XGBoost",
         "params": {
-            "n_estimators": 757,
-            "max_depth": 4,
-            "learning_rate": 0.0670942868711159,
-            "reg_lambda": 8.470480081281215
+            "n_estimators": 218,
+            "max_depth": 5,
+            "learning_rate": 0.08260864084983896,
+            "reg_lambda": 3.4399382710028794,
+            "random_state": 42
         }
     },
     {
         "model_name": "LightGBM",
         "params": {
-            "n_estimators": 431,
-            "max_depth": 7,
-            "learning_rate": 0.048825685319224564,
-            "reg_lambda": 2.3578241274985103,
-            "num_leaves": 215,
-            "min_data_in_leaf": 40,
-            "subsample": 0.9184878774648287,
-            "feature_fraction": 0.33509568163558134
+            "n_estimators": 315,
+            "max_depth": 15,
+            "learning_rate": 0.029356613598501266,
+            "reg_lambda": 6.168406738988662,
+            "num_leaves": 140,
+            "min_data_in_leaf": 24,
+            "subsample": 0.9385196876075751,
+            "feature_fraction": 0.3531625227749787,
+            "random_state": 42
         }
     }
 ]
