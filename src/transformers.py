@@ -22,6 +22,8 @@ class DataCleaner(TransformerMixin, BaseEstimator):
         self.kitchensquare_median_ = X['KitchenSquare'].median()
         self.kitchensquare_q99_ = X['KitchenSquare'].quantile(0.99)
 
+        self.feature_names_in_ = X.columns.tolist()
+
         return self
 
 
@@ -88,6 +90,20 @@ class DataCleaner(TransformerMixin, BaseEstimator):
         X = X.drop('Shops_2', axis=1)
 
         return X
+    
+    def get_feature_names_out(self, input_features=None):
+        if input_features is None:
+            input_features = self.feature_names_in_
+        input_features = list(input_features)
+
+        out = [c for c in input_features if c not in ('Id', 'Ecology_2', 'Ecology_3', 'Shops_2')]
+        # позиция новых колонок: в конце (transform добавляет их в конец)
+        out += [
+            'Ecology_2_is_A', 'Ecology_2_is_B',
+            'Ecology_3_is_A', 'Ecology_3_is_B',
+            'Shops_2_is_A', 'Shops_2_is_B',
+        ]
+        return np.asarray(out, dtype=object)
 
 
 class LifesquareKNNImputer(TransformerMixin, BaseEstimator):
@@ -157,6 +173,8 @@ class LifesquareKNNImputer(TransformerMixin, BaseEstimator):
         self.lifesquare_knn_imputer_ = KNeighborsRegressor(**self.best_params_)
         self.lifesquare_knn_imputer_.fit(X_scaled, target)
 
+        self.feature_names_in_ = X.columns.tolist()
+
         return self
 
     def transform(self, X: pd.DataFrame) -> pd.DataFrame:
@@ -167,6 +185,11 @@ class LifesquareKNNImputer(TransformerMixin, BaseEstimator):
         X.loc[miss_mask, 'LifeSquare'] = self.lifesquare_knn_imputer_.predict(X_scaled)
 
         return X
+    
+    def get_feature_names_out(self, input_features=None):
+        if input_features is None:
+            input_features = self.feature_names_in_
+        return np.asarray(input_features, dtype=object)
 
 class HealthcareKNNImputer(TransformerMixin, BaseEstimator):
     def __init__(self):
@@ -227,6 +250,7 @@ class HealthcareKNNImputer(TransformerMixin, BaseEstimator):
         self.healthcare_knn_imputer_ = KNeighborsRegressor(**self.best_params_)
         self.healthcare_knn_imputer_.fit(X_scaled, target)
 
+        self.feature_names_in_ = X.columns.tolist()
         return self
 
     def transform(self, X: pd.DataFrame) -> pd.DataFrame:
@@ -237,13 +261,18 @@ class HealthcareKNNImputer(TransformerMixin, BaseEstimator):
         X.loc[miss_mask, 'Healthcare_1'] = self.healthcare_knn_imputer_.predict(X_scaled)
         
         return X
+    
+    def get_feature_names_out(self, input_features=None):
+        if input_features is None:
+            input_features = self.feature_names_in_
+        return np.asarray(input_features, dtype=object)
 
 class FeaturesCreator(TransformerMixin, BaseEstimator):
     def __init__(self):
         pass
 
     def fit(self, X: pd.DataFrame, y: pd.DataFrame=None):
-        temp = X[['DistrictId', 'Square']].copy()
+        '''temp = X[['DistrictId', 'Square']].copy()
         temp['Price'] = y.values   
 
         self.median_price_df_ = temp.groupby('DistrictId').apply(lambda g: g['Price'].median() / g['Square'].median()).rename('median_price_per_square').reset_index()
@@ -256,10 +285,10 @@ class FeaturesCreator(TransformerMixin, BaseEstimator):
 
         self.median_price_df2_ = temp.groupby('Rooms')['Price'].median().rename('median_price_per_room').reset_index()
         
-        self.median_per_one_room_ = temp.loc[temp['Rooms'] == 1, 'Price'].median()
+        self.median_per_one_room_ = temp.loc[temp['Rooms'] == 1, 'Price'].median()'''
 
 
-
+        self.feature_names_in_ = X.columns.tolist()
         return self
 
     def transform(self, X: pd.DataFrame) -> pd.DataFrame:
@@ -271,7 +300,7 @@ class FeaturesCreator(TransformerMixin, BaseEstimator):
 
         X['Lifesquare_Ratio'] = (X['LifeSquare'] / X['Square']).fillna(0)
 
-        X = X.merge(self.median_price_df_, on='DistrictId', how='left')
+        '''X = X.merge(self.median_price_df_, on='DistrictId', how='left')
         X['median_price_per_square'] = X['median_price_per_square'].fillna(self.median_all_district_)
 
         X = X.merge(self.median_price_df2_, on='Rooms', how='left')
@@ -280,9 +309,15 @@ class FeaturesCreator(TransformerMixin, BaseEstimator):
         X['Floor_HouseFloor_Ratio'] = X['Floor'] / X['HouseFloor']
 
         is_studio_mask = (X['Rooms'] == 1) & (X['LifeSquare'] > 0) & (X['KitchenSquare'] == 0)
-        X['Is_Studio'] = is_studio_mask * 1
+        X['Is_Studio'] = is_studio_mask * 1'''
 
         return X
+    
+    def get_feature_names_out(self, input_features=None):
+        if input_features is None:
+            input_features = self.feature_names_in_
+        out = list(input_features) + ['Is_First_Floor', 'Is_Last_Floor', 'Lifesquare_Ratio']
+        return np.asarray(out, dtype=object)
 
 
 class SimpleDataCleaner(TransformerMixin, BaseEstimator):
@@ -302,3 +337,8 @@ class SimpleDataCleaner(TransformerMixin, BaseEstimator):
         X.drop('Id', axis=1, inplace=True)
         X = pd.get_dummies(X, columns=['Ecology_2', 'Ecology_3', 'Shops_2'], drop_first=True)
         return X
+
+    def get_feature_names_out(self, input_features=None):
+        if input_features is not None:
+            return input_features
+        return self.feature_names_in_
